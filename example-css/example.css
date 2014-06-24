@@ -15,7 +15,7 @@ body {
 }
 #lab1-mouse {
 	top: 150px;
-	left: 20;
+	left: 20px;
 }
 #lab1-cheese {
 	top: 300px;
@@ -24,7 +24,7 @@ body {
 
 #lab2-mouse {
 	top: 0;
-	left: 20;
+	left: 20px;
 }
 #lab2-cheese {
 	top: 400px;
