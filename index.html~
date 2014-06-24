@@ -95,9 +95,10 @@
     <title>Jquery labyrinth plugin test</title>
   </head>
   <body>
-  	<h1>Labyrinth by Matteo Sisti Sette</h1>
+  	<h1>Labyrinth jQuery plugin by Matteo Sisti Sette</h1>
   	<h2>A jQuery plugin to create labyrinth games</h2>
-  	<p> This plugin allows you to create 
+  	<p> See the source code of this very page as an example. It's super-simple!</p>
+  	<p> <a href="https://github.com/matteosistisette/jquery-ui-labyrinth">Download from Github</a></p>
   	
   	<!-- MARKUP --> 
   	<div id="labyrinth1" class="labyrinth">
