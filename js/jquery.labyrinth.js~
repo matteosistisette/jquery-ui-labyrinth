@@ -453,8 +453,8 @@
 			if (complete>=0) {
 				this.complete[complete]=true;
 				this.ncomplete++;
-				this.options.onComplete.call(this,complete, this.ncomplete==this.options.inOutPairs.length);
 				this._clearDrawingInternally();	
+				this.options.onComplete.call(this,complete, this.ncomplete==this.options.inOutPairs.length);
 				if (this.ncomplete==this.options.inOutPairs.length) {
 					this.options.onCompleteAll.call(this);
 				}

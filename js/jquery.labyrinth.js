@@ -1,3 +1,10 @@
+/* Labyrinth: a jQuery plugin for creating labyrinth games
+              by Matteo Sisti Sette
+
+http://gitgub.com/matteosistisette/jquery-ui-labyrinth
+
+*/
+
 (function($){
 	
 	$.widget("matteosistisette.labyrinth", {
