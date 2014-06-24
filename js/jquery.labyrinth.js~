@@ -3,20 +3,23 @@
 	$.widget("matteosistisette.labyrinth", {
 		
 		
-		ver: [],
-		hor: [],
+		ver: null,		//[]
+		hor: null,		//[]
 		currentdrawpos: -1,
 		drawing: false,
 		enteredfrom: -1,
 		
 		started: false,
-		drawn: [],
+		drawn: null,		//[]
 		
 		canvas:null,
 		drawContext: null,
 		
 		prevx:0,
 		prevy:0,
+		
+		complete:null,		//[]
+		ncomplete: 0,
 		
 		
 		options: {
@@ -28,15 +31,25 @@
 			drawWidth: 1,
 			borderColor: "#000000",
 			borderWidth: 1,
+			borderLineCap: "square",
 			inOutPairs: [],
 			padding: [50, 50, 50, 50],
 			onStart: function() {},
-			onComplete: function() {}
+			onComplete: function() {},
+			onCompleteAll: function() {}
 		},
 		
-		rreset: function() {
+		reset: function() {
 			this._cleanUp();
 			this._build();
+		},
+		
+		clearDrawing: function() {
+			this._clearDrawingInternally();
+			this.drawContext.clearRect(0,0,this.canvas.width, this.canvas.height);
+			this._drawBorders();
+			this.complete=[];
+			this.ncomplete=0;
 		},
 		
 		destroy: function () {
@@ -55,7 +68,23 @@
 		},
 		_setOptions: function(options) {
 			this._super(options);
-			this._update();
+			if (options.columns!=undefined
+				|| options.rows!=undefined
+				|| options.cellSize!=undefined
+				|| options.density!=undefined
+				|| options.inOutPairs!=undefined
+			) {
+				this.reset();
+			}
+			else if (options.borderColor!=undefined
+				|| options.borderWidth!=undefined
+				|| options.borderLineCap!=undefined
+				|| options.padding!=undefined
+				
+			) {
+				this.clearDrawing();
+			}
+			
 		},
 		
 		_create: function () {
@@ -64,7 +93,7 @@
 		},
 		
 		_update: function () {
-			rreset();
+			reset();
 		},
 		
 		_cleanUp: function() {
@@ -78,16 +107,27 @@
 		
 			this.started=false;
 			this.drawn=[];
+			this.complete=[];
+			this.ncomplete=0;
 			
 			
 			this.canvas=null;
 			this.drawContext=null;
+		},
+		
+		_clearDrawingInternally: function() {
+			this.drawn=[];
+			this.currentdrawpos=-1;
+			this.started=false;
+			this.enteredfrom=-1;
+			
 		},
 				
 		_build: function() {
 			this.ver=[];
 			this.hor=[];
 			this.drawn=[];
+			this.complete=[];
 			
 			var fullCanvasWidth=this.options.columns*this.options.cellSize+this.options.padding[3]+this.options.padding[1];
 			var fullCanvasHeight=this.options.rows*this.options.cellSize+this.options.padding[0]+this.options.padding[2];
@@ -127,12 +167,19 @@
 					for (var x=0;x<this.options.density-nopen;x++) this.openWall(i,Math.floor(Math.random()*4));
 				}
 			}
-			
 			var ctx=this.canvas.getContext("2d");
 			this.drawContext=ctx;
+			
+			this._drawBorders();
+		},
+		
+		_drawBorders: function() {
+			
+			var ctx=this.drawContext;
 			ctx.strokeStyle=this.options.borderColor;
 			ctx.lineWidth=this.options.borderWidth;
 			ctx.beginPath();
+			ctx.lineCap=this.options.borderLineCap;
 			var paddingLeft=this.options.padding[3];
 			var paddingTop=this.options.padding[0];
 			for (var i=0;i<this.hor.length;i++) {
@@ -295,8 +342,8 @@
 				return false;
 			}
 			this.drawContext.lineWidth=this.options.drawWidth;
-			this.drawContext.strokeStyle=this.options.drawcolor;
-
+			this.drawContext.strokeStyle=this.options.drawColor;
+			
 			
 			
 			if (this.currentdrawpos==-1 || this.currentdrawpos!=oldpos) {
@@ -329,15 +376,19 @@
 			
 			var newpos=this._getDrawPos(mousex,mousey);
 			var havetodraw=false;
+			var complete=-1;
 			if (newpos!=this.currentdrawpos) {
 				//debug (this.currentdrawpos+"=>"+newpos);
 				if (this.currentdrawpos==-1) {
 					var isentrance=false;
-					for (var i=0;i<this.options.inOutPairs.length;i++) {
-						if (this.options.inOutPairs[i][0]==newpos) {
+					if (this.enteredfrom<0) for (var i=0;i<this.options.inOutPairs.length;i++) {
+						if (this.options.inOutPairs[i][0]==newpos && !this.complete[i]) {
 							isentrance=true;
 							break;
 						}
+					}
+					else if (this.enteredfrom==newpos) {
+						isentrance=true;
 					}
 					if (isentrance) {
 						this.enteredfrom=newpos;
@@ -354,21 +405,19 @@
 					}
 				}
 				else if (newpos==-1) {
-					var got=false;
 					for (var i=0;i<this.options.inOutPairs.length;i++) {
 						if (this.options.inOutPairs[i][0]==this.enteredfrom && this.options.inOutPairs[i][1]==this.currentdrawpos) {
-							got=true;
+							complete=i;
 							break;
 
 						}
 					}
-					if (got) {
+					if (complete>=0) {
 						
 						//debug("won");
 
 						this.drawing=false;
 						havetodraw=true;
-						this.options.onComplete.call(this);
 					}
 					else {
 						this.drawing=false;
@@ -391,12 +440,24 @@
 			}
 			else havetodraw=true;
 			if (havetodraw) {
+				this.drawContext.lineWidth=this.options.drawWidth;
+				this.drawContext.strokeStyle=this.options.drawcolor;
+			
 				this.drawContext.beginPath();
 				this.drawContext.moveTo(this.prevx,this.prevy);
 				this.drawContext.lineTo(mousex,mousey);
 				this.drawContext.stroke();
 				this.prevx=mousex;
 				this.prevy=mousey;
+			}
+			if (complete>=0) {
+				this.complete[complete]=true;
+				this.ncomplete++;
+				this.options.onComplete.call(this,complete, this.ncomplete==this.options.inOutPairs.length);
+				this._clearDrawingInternally();	
+				if (this.ncomplete==this.options.inOutPairs.length) {
+					this.options.onCompleteAll.call(this);
+				}
 			}
 		},
 		
