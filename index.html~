@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <!-- DEPENDENCIES (jQuery & jQuery-UI) -->
+    <link href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.min.css" rel="stylesheet" type="text/css">
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.min.js"></script>
+
+    <!-- LABYRINTH PLUGIN (script & style) -->
+    <link href="css/jquery.labyrinth.css" rel="stylesheet">
+    <script src="js/jquery.labyrinth.js"></script>
+    
+    <!-- STYLESHEET FOR THIS PARTICULAR EXAMPLE -->
+    <link  rel="stylesheet" href="example-css/example.css" type="text/css">
+    
+    <!-- EXAMPLE JAVASCRIPT CODE USING THE PLUGIN --> 
+    <script>
+    
+    // First labyrinth: one in-out pair. 
+    
+    $(function(){
+    	$("#labyrinth1").labyrinth({
+		cellSize: 50, 
+		rows: 10, 
+		columns: 12, 
+		borderWidth: 5,
+		borderLineCap: "square", //square is default
+		borderColor: "#406060",
+		drawWidth: 2,
+		drawColor: "#000000",
+		
+		// Cells are numbered from left to right
+		//  and from top to bottom, row-wise. First is 0
+		inOutPairs: [[48,83]], 
+		
+		// Padding (outside labyrinth): top, right, bottom, left.
+		// Padding area is drawable too.
+		padding: [2, 100, 2, 140],
+		
+		onComplete: function(n) {
+			alert("Congratulations! The mouse got the cheese!");
+			this.reset();
+		}
+    	});
+    	
+    });
+    
+    
+    // Second labyrinth: two in-out pairs
+    
+    $(function(){
+    	
+    	$("#labyrinth2").labyrinth({
+		cellSize: 50, 
+		rows: 10, 
+		columns: 12, 
+		borderWidth: 5,
+		borderLineCap: "round", //only "round" or "square"
+		borderColor: "#aa6060",
+		drawWidth: 2,
+		drawColor: "#000000",
+		
+		// Two enter-exit pairs:
+		inOutPairs: [[12,107], [96,23]],
+		
+		padding: [2, 100, 2, 140],
+		
+		onComplete: function(n, isLast) {
+			this.options.drawColor="#ff0000";
+			var message1="";
+			var message2="";
+			switch (n) {
+				case 0:
+					message1= "Congratulations! The mouse got the cheese!\n";
+					message2= "Now go help the bear get the honey!!";
+				break;
+				case 1:
+					message1= "Congratulations! The bear got the honey!\n";
+					message2= "Now go help the mouse get the cheese!!";
+				break;
+			}
+			var message=message1;
+			if (!isLast) message+=message2;
+			alert(message);
+			if (isLast) {
+				this.options.drawColor="#000000";
+				this.reset();
+			}
+		}
+    	});
+    	
+    });
+    </script>
+    <title>Jquery labyrinth plugin test</title>
+  </head>
+  <body>
+  	<h1>Labyrinth by Matteo Sisti Sette</h1>
+  	<h2>A jQuery plugin to create labyrinth games</h2>
+  	<p> This plugin allows you to create 
+  	
+  	<!-- MARKUP --> 
+  	<div id="labyrinth1" class="labyrinth">
+  		<img class="labyrinth-image" id="lab1-mouse" src="example-images/mouse.jpg">
+  		<img class="labyrinth-image" id="lab1-cheese" src="example-images/cheese.jpg">
+  	</div>
+  	<div id="labyrinth2" class="labyrinth">
+  		<img class="labyrinth-image" id="lab2-mouse" src="example-images/mouse.jpg">
+  		<img class="labyrinth-image" id="lab2-cheese" src="example-images/cheese.jpg">
+  		<img class="labyrinth-image" id="lab2-bear" src="example-images/bear.jpg">
+  		<img class="labyrinth-image" id="lab2-honey" src="example-images/honey.jpg">
+  	</div>
+  </body>
+</html>
