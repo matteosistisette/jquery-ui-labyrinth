@@ -1,7 +1,8 @@
 {
 	"name": "labyrinth",
-	"version": "0.0.3",
-	"title": "A simple jQuery-UI widget for creating labyrinth games",
+	"version": "0.0.4",
+	"title": "jQuery Labyrinth",
+	"description": "A simple jQuery-UI widget for creating labyrinth games",
 	"author": {
 		"name": "Matteo Sisti Sette",
 		"email": "matteosistisette@gmail.com",
