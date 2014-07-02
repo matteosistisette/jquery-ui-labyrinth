@@ -1,5 +1,10 @@
 /* Labyrinth: a jQuery plugin for creating labyrinth games
               by Matteo Sisti Sette
+              
+   v. 0.0.5
+   
+   Copyright 2014 Matteo Sisti Sette
+   Released under the GPLv2 licence
 
 http://gitgub.com/matteosistisette/jquery-ui-labyrinth
 
@@ -39,6 +44,7 @@ http://gitgub.com/matteosistisette/jquery-ui-labyrinth
 			borderColor: "#000000",
 			borderWidth: 1,
 			borderLineCap: "square",
+			backgroundColor: "rgba(255,255,255,0)",
 			inOutPairs: [],
 			padding: [50, 50, 50, 50],
 			onStart: function() {},
@@ -183,6 +189,10 @@ http://gitgub.com/matteosistisette/jquery-ui-labyrinth
 		_drawBorders: function() {
 			
 			var ctx=this.drawContext;
+			
+			ctx.fillStyle=this.options.backgroundColor;
+			ctx.fillRect(this.options.padding[3], this.options.padding[0], this.options.columns*this.options.cellSize, this.options.rows*this.options.cellSize);
+			
 			ctx.strokeStyle=this.options.borderColor;
 			ctx.lineWidth=this.options.borderWidth;
 			ctx.beginPath();
