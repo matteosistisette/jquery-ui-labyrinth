@@ -1,7 +1,7 @@
 /* Labyrinth: a jQuery plugin for creating labyrinth games
               by Matteo Sisti Sette
               
-   v. 0.0.5
+   v. 0.0.6
    
    Copyright 2014 Matteo Sisti Sette
    Released under the GPLv2 licence
@@ -481,21 +481,21 @@ http://gitgub.com/matteosistisette/jquery-ui-labyrinth
 		_activateDraw: function() {
 		
 			//var lab=this;
-			$(this.element).mousedown(function(mouseEvent) {
+			$(this.element).on("vmousedown", function(mouseEvent) {
 				var lab=$(this).data("matteosistisette-labyrinth");
 				lab._handleMouseDown(mouseEvent);
 				return false;
 			});
 			
 			
-			$(this.element).mouseup(function(mouseEvent) {
+			$(this.element).on("vmouseup", function(mouseEvent) {
 				var lab=$(this).data("matteosistisette-labyrinth");
 				lab._handleMouseUp(mouseEvent);
 				return false;
 			});
 			
 			
-			$(this.element).mousemove(function(mouseEvent) {
+			$(this.element).on("vmousemove", function(mouseEvent) {
 				var lab=$(this).data("matteosistisette-labyrinth");
 				lab._handleMouseMove(mouseEvent);
 				return false;
