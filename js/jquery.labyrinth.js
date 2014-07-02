@@ -1,7 +1,7 @@
 /* Labyrinth: a jQuery plugin for creating labyrinth games
               by Matteo Sisti Sette
               
-   v. 0.0.6
+   v. 0.0.7
    
    Copyright 2014 Matteo Sisti Sette
    Released under the GPLv2 licence
